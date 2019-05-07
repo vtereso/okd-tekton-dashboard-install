@@ -89,46 +89,46 @@ popd
 # done
 
 
-# Make SA privileged to enable hostPath volumes (used within pipelineruns)
-oc adm policy add-scc-to-user privileged system:serviceaccount:${INSTALL_NAMESPACE}:${DASHBOARD_SERVICE_ACCOUNT}
-# Apply sample pipeline and create run
-PIPELINE_HOTEL="$HOME/go/src/github.com/pipeline-hotel/example-pipelines"
-# Fork of pipeline-hotel/example-pipelines with variable stubs
-git clone https://github.com/vtereso/example-pipelines ${PIPELINE_HOTEL}
-pushd ${PIPELINE_HOTEL}
-# Create 'registry-secret' tekton registry secret and patch to dashboard SA
-./create-tekton-docker-secret.sh
-# Create pipeline and related CRDs
-kubectl apply -f config -n ${INSTALL_NAMESPACE}
-# Replace variables stubs
-envsubst < runner.yaml > /tmp/runner.yaml
-mv -f /tmp/runner.yaml runner.yaml
+# # Make SA privileged to enable hostPath volumes (used within pipelineruns)
+# oc adm policy add-scc-to-user privileged system:serviceaccount:${INSTALL_NAMESPACE}:${DASHBOARD_SERVICE_ACCOUNT}
+# # Apply sample pipeline and create run
+# PIPELINE_HOTEL="$HOME/go/src/github.com/pipeline-hotel/example-pipelines"
+# # Fork of pipeline-hotel/example-pipelines with variable stubs
+# git clone https://github.com/vtereso/example-pipelines ${PIPELINE_HOTEL}
+# pushd ${PIPELINE_HOTEL}
+# # Create 'registry-secret' tekton registry secret and patch to dashboard SA
+# ./create-tekton-docker-secret.sh
+# # Create pipeline and related CRDs
+# kubectl apply -f config -n ${INSTALL_NAMESPACE}
+# # Replace variables stubs
+# envsubst < runner.yaml > /tmp/runner.yaml
+# mv -f /tmp/runner.yaml runner.yaml
 
-# Create PVs for TaskPods
-for i in {1..10};do
-DIRNAME="vol$i"
-mkdir -p /mnt/data/$DIRNAME 
-chcon -Rt svirt_sandbox_file_t /mnt/data/$DIRNAME
-chmod 777 /mnt/data/$DIRNAME
-cat << PV | oc create -f -
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: vol${i}
-spec:
-  capacity:
-    storage: 10Gi 
-  accessModes:
-    - ReadWriteOnce     
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy: Recycle
-  hostPath:
-    path: /mnt/data/vol${i}
-PV
-done
-# Create pipelinerun
-kubectl apply -f runner.yaml
-popd
+# # Create PVs for TaskPods
+# for i in {1..10};do
+# DIRNAME="vol$i"
+# mkdir -p /mnt/data/$DIRNAME 
+# chcon -Rt svirt_sandbox_file_t /mnt/data/$DIRNAME
+# chmod 777 /mnt/data/$DIRNAME
+# cat << PV | oc create -f -
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: vol${i}
+# spec:
+#   capacity:
+#     storage: 10Gi 
+#   accessModes:
+#     - ReadWriteOnce     
+#     - ReadWriteMany
+#   persistentVolumeReclaimPolicy: Recycle
+#   hostPath:
+#     path: /mnt/data/vol${i}
+# PV
+# done
+# # Create pipelinerun
+# kubectl apply -f runner.yaml
+# popd
 
 # Install Dashboard webhooks
 # EXPERIMENTAL_DASHBOARD_REPO="$HOME/go/src/github.com/tektoncd/experimental"
