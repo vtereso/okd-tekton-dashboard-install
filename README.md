@@ -1,7 +1,7 @@
 # OKD Tekton-Dashboard
 This repository provides utility scripts to:
-- Automate the tekton-dashboard installation on OKD (as well as all prerequisites) 
-- Install OKD with single VM configuration (See: https://docs.openshift.com/container-platform/3.11/install/prerequisites.html) 
+- Automate the tekton-dashboard installation on OKD (as well as all prerequisites)
+- Install OKD with single VM configuration (See: https://docs.openshift.com/container-platform/3.11/install/prerequisites.html)
 
 Please note this repository has been only been tested on RHEL7 VMs AND assumes `subscription-manager` has been appropriately configured. To use these scripts, update the `$DOCKER_USERNAME` and `$DOCKER_PASSWORD` parameters within `env.sh` file as the tekton-dashboard uses ko and will publish to your dockerhub account, otherwise you will be prompted for them. Specific to OKD installation, you may also optionally update the `$USERNAME` and `$PASSWORD` variables, which correspond to your OKD login credentials. These OKD credentials are stored at `$HTPASSWD_FILE`. If the values are not provided, you will be prompted.
 
