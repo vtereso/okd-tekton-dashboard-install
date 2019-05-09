@@ -64,8 +64,8 @@ if [[ -z ${DOCKER_PASSWORD} ]];then
 fi
 
 # Docker login
-#docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-cat env.sh | sed -n 's|.*DOCKER_PASSWORD="\(.*\)"|\1|p' | docker login --username ${DOCKER_USERNAME} --password-stdin
+docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+#cat env.sh | sed -n 's|.*DOCKER_PASSWORD="\(.*\)"|\1|p' | docker login --username ${DOCKER_USERNAME} --password-stdin
 
 # Dashboard Install
 DASHBOARD_DIR="$HOME/go/src/github.com/tektoncd/dashboard"
